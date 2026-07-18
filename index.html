@@ -3,19 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07070c">
+<meta name="theme-color" content="#1d2025">
 <meta name="color-scheme" content="dark">
 <title>Vinyl Mixset</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
-  --bg:#07070c;
-  --ink:#fff;
-  --dim:rgba(255,255,255,.55);
-  --memo:rgba(255,255,255,.62);
-  --faint:rgba(255,255,255,.38);
-  --glass:rgba(255,255,255,.05);
-  --glass-line:rgba(255,255,255,.1);
+  --bg:#1d2025;
+  --card-hi:#23272d;
+  --card-lo:#171a1e;
+  --sh-dark:rgba(0,0,0,.55);
+  --sh-light:rgba(255,255,255,.05);
+  --ink:#e9ebee;
+  --dim:#9aa0a8;
+  --memo:#a6acb4;
+  --faint:#6a7078;
   --pink:#ff3d7f;
   --violet:#8b5cff;
   --cyan:#38e8ff;
@@ -32,116 +34,119 @@ body{
   font-size:15px;
   line-height:1.5;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
 }
-
-/* ── 배경 글로우 ─────────────────────── */
-.glow{
-  position:fixed;border-radius:50%;
-  filter:blur(90px);
-  pointer-events:none;z-index:0;
-}
-.g1{width:340px;height:340px;left:-120px;top:-80px;background:rgba(255,61,127,.42);animation:drift1 26s ease-in-out infinite alternate}
-.g2{width:300px;height:300px;right:-110px;top:220px;background:rgba(139,92,255,.4);animation:drift2 32s ease-in-out infinite alternate}
-.g3{width:320px;height:320px;left:-60px;bottom:-140px;background:rgba(56,232,255,.28);animation:drift3 29s ease-in-out infinite alternate}
-@keyframes drift1{to{transform:translate(50px,40px) scale(1.12)}}
-@keyframes drift2{to{transform:translate(-60px,60px) scale(1.08)}}
-@keyframes drift3{to{transform:translate(40px,-50px)}}
-@media (prefers-reduced-motion:reduce){.glow{animation:none}}
-
-.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 18px calc(48px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto;padding:0 20px calc(48px + env(safe-area-inset-bottom))}
 
 /* ── masthead ───────────────────────── */
 header{
   display:flex;align-items:flex-end;justify-content:space-between;
-  padding:30px 2px 18px;
+  padding:30px 2px 20px;
 }
 h1{
   font-size:clamp(30px,9vw,38px);
   font-weight:800;
   letter-spacing:-.02em;
   line-height:1.05;
+  color:transparent;
   background:var(--grad);
   -webkit-background-clip:text;
   background-clip:text;
-  color:transparent;
-  filter:drop-shadow(0 0 22px rgba(139,92,255,.35));
+  filter:drop-shadow(0 0 18px rgba(139,92,255,.35));
 }
 .count{
   font:600 12px/1 var(--mono);
   color:var(--dim);
   font-variant-numeric:tabular-nums;
-  padding:6px 11px;
+  padding:7px 12px;
   border-radius:999px;
-  background:var(--glass);
-  border:1px solid var(--glass-line);
-  backdrop-filter:blur(14px) saturate(150%);
-  -webkit-backdrop-filter:blur(14px) saturate(150%);
-  margin-bottom:5px;
+  box-shadow:inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px var(--sh-light);
+  margin-bottom:6px;
   white-space:nowrap;
 }
 
-/* ── 정렬 (플로팅 글래스 세그먼트) ────── */
-.sorts{
+/* ── NOW / NEXT 스티키 바 ─────────────── */
+.nowbar{
   position:sticky;top:10px;z-index:20;
-  display:flex;gap:2px;
-  width:fit-content;
-  margin:0 auto 16px;
-  padding:4px;
-  border-radius:999px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--glass-line);
-  backdrop-filter:blur(20px) saturate(170%);
-  -webkit-backdrop-filter:blur(20px) saturate(170%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 8px 28px rgba(0,0,0,.45);
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:18px;
+  padding:11px 12px 11px 15px;
+  border-radius:18px;
+  background:var(--bg);
+  box-shadow:7px 7px 14px var(--sh-dark), -7px -7px 14px var(--sh-light);
+  cursor:pointer;
+  user-select:none;
 }
-.sort{
-  background:none;border:none;cursor:pointer;
-  font-family:var(--sans);
-  font-size:12.5px;font-weight:600;
-  color:var(--dim);
-  padding:7px 14px;
-  border-radius:999px;
+.nb-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.nb-row{display:flex;align-items:center;gap:9px;min-width:0}
+.nb-label{
+  flex:none;width:36px;
+  font:800 9px/1 var(--mono);letter-spacing:.1em;
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.nb-label.c{background:none;color:var(--cyan)}
+.nb-label.f{background:none;color:var(--faint)}
+.nb-text{
+  flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.nb-row.now .nb-text{font-size:12.5px;font-weight:500;color:var(--dim)}
+.nb-row.next .nb-text{font-size:13.5px;font-weight:700;color:var(--ink)}
+.nb-bpm{
+  flex:none;
+  font-weight:800;font-variant-numeric:tabular-nums;
+}
+.nb-row.now .nb-bpm{font-size:13px;color:var(--dim)}
+.nb-row.next .nb-bpm{
+  font-size:15px;
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* ── 화면유지 토글 ─────────────────────── */
+.wake{
+  flex:none;border:none;cursor:pointer;
+  font:700 10px/1.5 var(--mono);letter-spacing:.04em;
+  color:var(--faint);
+  background:var(--bg);
+  padding:8px 10px;
+  border-radius:12px;
+  box-shadow:inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px var(--sh-light);
+  text-align:center;
   transition:color .15s;
 }
-.sort[aria-pressed="true"]{
+.wake.on{
   color:#fff;
   background:var(--grad);
-  box-shadow:0 4px 16px rgba(255,61,127,.35), 0 4px 16px rgba(139,92,255,.3);
+  box-shadow:3px 3px 8px var(--sh-dark), 0 0 14px rgba(255,61,127,.35);
 }
 
-/* ── crate divider ──────────────────── */
-.crate{
-  display:flex;align-items:center;gap:12px;
-  padding:22px 4px 10px;
-}
-.crate span{
-  font:700 13px/1 var(--mono);
-  background:var(--grad);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-.crate i{flex:1;height:1px;background:var(--glass-line)}
+/* ── delta 공통 ───────────────────────── */
+.delta{font:600 10.5px/1 var(--mono)}
+.delta.up{color:var(--pink)}
+.delta.down{color:var(--cyan)}
+.delta.flat{color:var(--faint)}
 
-/* ── card (글래스 패널) ───────────────── */
+/* ── card ─────────────────────────────── */
 .card{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   column-gap:18px;
-  padding:16px 17px 15px;
-  margin-bottom:10px;
-  border-radius:18px;
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,.09);
-  backdrop-filter:blur(16px) saturate(150%);
-  -webkit-backdrop-filter:blur(16px) saturate(150%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+  padding:17px 18px 16px;
+  margin-bottom:16px;
+  border-radius:20px;
+  border:1.5px solid transparent;
+  background:linear-gradient(145deg, var(--card-hi), var(--card-lo));
+  box-shadow:7px 7px 14px var(--sh-dark), -7px -7px 14px var(--sh-light);
+  cursor:pointer;
+  user-select:none;
+  transition:opacity .18s, box-shadow .15s;
 }
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .card{background:rgba(22,22,32,.88)}
-  .sorts{background:rgba(22,22,32,.92)}
-  .count{background:rgba(22,22,32,.88)}
+.card:active{box-shadow:3px 3px 8px var(--sh-dark), -3px -3px 8px var(--sh-light)}
+.card.past{opacity:.35}
+.card.now{
+  background:linear-gradient(145deg, var(--card-hi), var(--card-lo)) padding-box, var(--grad) border-box;
+  box-shadow:7px 7px 14px var(--sh-dark), -7px -7px 14px var(--sh-light), 0 0 22px rgba(139,92,255,.25);
 }
 .main{min-width:0}
 .pos{
@@ -149,11 +154,18 @@ h1{
   font:600 11px/1 var(--mono);
   letter-spacing:.03em;
   color:var(--cyan);
-  background:rgba(56,232,255,.1);
-  border:1px solid rgba(56,232,255,.28);
-  padding:4px 9px;
+  padding:5px 10px;
   border-radius:999px;
-  margin-bottom:9px;
+  box-shadow:inset 3px 3px 6px var(--sh-dark), inset -3px -3px 6px rgba(56,232,255,.08);
+  margin-bottom:10px;
+  vertical-align:middle;
+}
+.nexttag{
+  font:800 9px/1 var(--mono);letter-spacing:.12em;
+  background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-left:8px;
+  vertical-align:middle;
 }
 .title{
   font-size:16.5px;
@@ -168,20 +180,28 @@ h1{
   color:var(--dim);
   margin-top:3px;
 }
+.side{
+  padding-top:26px;
+  text-align:right;
+}
 .bpm{
   font-size:26px;
   font-weight:800;
   line-height:1;
   font-variant-numeric:tabular-nums;
   letter-spacing:-.02em;
-  padding-top:26px;
-  text-align:right;
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
+.side .delta{display:block;margin-top:5px}
 .memo{
   grid-column:1/-1;
-  margin-top:12px;
-  padding-top:11px;
-  border-top:1px solid rgba(255,255,255,.08);
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid rgba(0,0,0,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
   font-size:13.5px;
   line-height:1.62;
   color:var(--memo);
@@ -206,10 +226,6 @@ footer{
 </style>
 </head>
 <body>
-<div class="glow g1"></div>
-<div class="glow g2"></div>
-<div class="glow g3"></div>
-
 <div class="wrap">
 
   <header>
@@ -217,11 +233,9 @@ footer{
     <span class="count" id="count"></span>
   </header>
 
-  <div class="sorts" id="sorts" role="group" aria-label="정렬">
-    <button class="sort" data-sort="sheet" aria-pressed="true">시트순</button>
-    <button class="sort" data-sort="pos">위치</button>
-    <button class="sort" data-sort="bpm">BPM</button>
-    <button class="sort" data-sort="artist">아티스트</button>
+  <div class="nowbar" id="nowbar">
+    <div class="nb-main" id="nbmain"></div>
+    <button class="wake" id="wake" hidden>화면유지<br>OFF</button>
   </div>
 
   <main id="list"></main>
@@ -230,106 +244,191 @@ footer{
 </div>
 
 <script>
-/* ═══ 여기에 Apps Script 배포 URL 붙여넣기 ═══ */
+/* ═══ Apps Script 배포 URL ═══ */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgamll5_pbVCplJW5iHLpGhNpRiJtrNwNYWn0Xau9i6NZMHduAmWvAQ9rZ6_GYLowg/exec";
 
 const CACHE_KEY = "vinylMixset";
-let DATA = [];
-let sort = "sheet";
+const NOW_KEY = "vinylMixset.now";
+let DATA = [];   // 원본
+let ORDER = [];  // 셋 순서(No 오름차순) + delta 계산본
+let nowIdx = -1; // ORDER 기준 현재 트랙, -1 = 시작 전
 
 const $list = document.getElementById("list");
 const $count = document.getElementById("count");
 const $sync = document.getElementById("sync");
+const $nbmain = document.getElementById("nbmain");
+const $wake = document.getElementById("wake");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const hhmm = t => new Date(t).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
 const fmtNo = v => { const s = String(v ?? "").trim(); return /^\d+$/.test(s) ? s.padStart(2,"0") : s; };
 
-/* 위치 자연정렬: A10이 A2 뒤에 오도록 */
-const posKey = p => {
-  const m = /^([A-Za-z]+)\s*(\d+)/.exec(p || "");
-  return m ? [m[1].toUpperCase(), +m[2]] : ["\uffff", 999];
-};
-
-function render(){
-  let rows = DATA.map((d,i)=>({...d,i}));
-
-  if(sort==="pos") rows.sort((a,b)=>{
-    const [la,na]=posKey(a.pos),[lb,nb]=posKey(b.pos);
-    return la===lb ? na-nb : la<lb?-1:1;
-  });
-  else if(sort==="bpm") rows.sort((a,b)=>(parseFloat(a.bpm)||999)-(parseFloat(b.bpm)||999));
-  else if(sort==="artist") rows.sort((a,b)=>String(a.artist).localeCompare(String(b.artist),'ja'));
-  else rows.sort((a,b)=>{
+/* ── 셋 순서 확정 + BPM 델타 계산 ── */
+function buildOrder(){
+  ORDER = DATA.map((d,i)=>({...d,i})).sort((a,b)=>{
     const na = parseFloat(a.no), nb = parseFloat(b.no);
     const ka = isNaN(na) ? 1e9 + a.i : na, kb = isNaN(nb) ? 1e9 + b.i : nb;
     return ka - kb;
   });
+  for(let i=0;i<ORDER.length;i++){
+    const cur = parseFloat(ORDER[i].bpm), prev = i>0 ? parseFloat(ORDER[i-1].bpm) : NaN;
+    ORDER[i].delta = (!isNaN(cur) && !isNaN(prev)) ? Math.round((cur-prev)*10)/10 : null;
+  }
+}
 
-  $count.textContent = rows.length + "곡";
+const deltaHtml = d => {
+  if(d === null || d === undefined) return "";
+  const cls = d>0 ? "up" : d<0 ? "down" : "flat";
+  const txt = d>0 ? "+"+d : d<0 ? String(d) : "±0";
+  return `<span class="delta ${cls}">${txt}</span>`;
+};
 
-  if(!rows.length){
+/* ── 현재 트랙 저장/복원 ── */
+function saveNow(){
+  if(nowIdx < 0){ localStorage.removeItem(NOW_KEY); return; }
+  const t = ORDER[nowIdx];
+  localStorage.setItem(NOW_KEY, JSON.stringify({t:t.title, p:t.pos}));
+}
+function restoreNow(){
+  try{
+    const s = JSON.parse(localStorage.getItem(NOW_KEY));
+    if(!s) return;
+    let i = ORDER.findIndex(d => d.title===s.t && d.pos===s.p);
+    if(i < 0) i = ORDER.findIndex(d => d.title===s.t);
+    nowIdx = i;
+  }catch(e){ nowIdx = -1; }
+}
+
+/* ── 렌더 ── */
+function render(){
+  $count.textContent = ORDER.length + "곡";
+
+  if(!ORDER.length){
     $list.innerHTML = `<p class="empty">트랙 없음</p>`;
+    renderBar();
     return;
   }
 
-  let html = "", crate = null;
-  for(const d of rows){
-    if(sort==="pos"){
-      const letter = posKey(d.pos)[0];
-      if(letter !== crate){
-        crate = letter;
-        html += `<div class="crate"><span>${esc(letter)}</span><i></i></div>`;
-      }
-    }
+  let html = "";
+  ORDER.forEach((d, i) => {
+    const cls = i===nowIdx ? "now" : (nowIdx>=0 && i<nowIdx) ? "past" : "";
     const posLine = [fmtNo(d.no), d.pos].filter(Boolean).join(" · ");
+    const tag = (nowIdx>=0 && i===nowIdx+1) ? `<span class="nexttag">NEXT</span>` : "";
     html += `
-    <article class="card">
+    <article class="card ${cls}" data-i="${i}">
       <div class="main">
-        ${posLine ? `<span class="pos">${esc(posLine)}</span>` : ""}
+        ${posLine ? `<span class="pos">${esc(posLine)}</span>` : ""}${tag}
         <h2 class="title">${esc(d.title)}</h2>
         <p class="artist">${esc(d.artist)}</p>
       </div>
-      <div class="bpm">${esc(d.bpm)}</div>
+      <div class="side">
+        <div class="bpm">${esc(d.bpm)}</div>
+        ${deltaHtml(d.delta)}
+      </div>
       ${d.memo ? `<p class="memo">${esc(d.memo)}</p>` : ""}
     </article>`;
-  }
+  });
   $list.innerHTML = html;
+  renderBar();
 }
 
+const trackLine = d => esc([ [fmtNo(d.no), d.pos].filter(Boolean).join("·"), d.title ].filter(Boolean).join("  "));
+
+function renderBar(){
+  if(!ORDER.length){ $nbmain.innerHTML = `<div class="nb-row next"><span class="nb-text">시트에 트랙을 추가해</span></div>`; return; }
+
+  let rows = "";
+  if(nowIdx < 0){
+    const first = ORDER[0];
+    rows += `<div class="nb-row now"><span class="nb-label f">SET</span><span class="nb-text">카드를 탭해서 현재 트랙 지정</span></div>`;
+    rows += `<div class="nb-row next"><span class="nb-label">START</span><span class="nb-text">${trackLine(first)}</span><span class="nb-bpm">${esc(first.bpm)}</span></div>`;
+  }else{
+    const cur = ORDER[nowIdx], nxt = ORDER[nowIdx+1];
+    rows += `<div class="nb-row now"><span class="nb-label">NOW</span><span class="nb-text">${trackLine(cur)}</span><span class="nb-bpm">${esc(cur.bpm)}</span></div>`;
+    if(nxt){
+      rows += `<div class="nb-row next"><span class="nb-label c">NEXT</span><span class="nb-text">${trackLine(nxt)}</span><span class="nb-bpm">${esc(nxt.bpm)} ${deltaHtml(nxt.delta)}</span></div>`;
+    }else{
+      rows += `<div class="nb-row next"><span class="nb-label f">END</span><span class="nb-text">마지막 트랙</span></div>`;
+    }
+  }
+  $nbmain.innerHTML = rows;
+}
+
+/* ── 인터랙션 ── */
+$list.addEventListener("click", e => {
+  const card = e.target.closest(".card");
+  if(!card) return;
+  const i = +card.dataset.i;
+  nowIdx = (i === nowIdx) ? -1 : i;
+  saveNow();
+  render();
+});
+
+document.getElementById("nowbar").addEventListener("click", e => {
+  if(e.target.closest(".wake")) return;
+  const target = document.querySelector(".card.now") || document.querySelector(".card");
+  target && target.scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+/* ── Wake Lock (화면 꺼짐 방지) ── */
+let wakeLock = null, wakeIntent = false;
+async function acquireWake(){
+  try{
+    wakeLock = await navigator.wakeLock.request("screen");
+    wakeLock.addEventListener("release", ()=>{ wakeLock = null; });
+    return true;
+  }catch(e){ return false; }
+}
+function wakeUI(){
+  $wake.classList.toggle("on", wakeIntent);
+  $wake.innerHTML = "화면유지<br>" + (wakeIntent ? "ON" : "OFF");
+}
+if("wakeLock" in navigator){
+  $wake.hidden = false;
+  $wake.addEventListener("click", async e => {
+    e.stopPropagation();
+    if(wakeIntent){
+      wakeIntent = false;
+      if(wakeLock){ wakeLock.release(); wakeLock = null; }
+    }else{
+      wakeIntent = await acquireWake();
+    }
+    wakeUI();
+  });
+  document.addEventListener("visibilitychange", async ()=>{
+    if(wakeIntent && document.visibilityState === "visible" && !wakeLock){
+      wakeIntent = await acquireWake();
+      wakeUI();
+    }
+  });
+}
+
+/* ── 데이터 로드 ── */
 async function load(){
   const cached = (()=>{ try{ return JSON.parse(localStorage.getItem(CACHE_KEY)); }catch(e){ return null; } })();
 
-  if(!SCRIPT_URL){
-    if(cached){ DATA = cached.tracks; $sync.textContent = "캐시 · " + hhmm(cached.t); }
-    else $sync.textContent = "SCRIPT_URL 미설정";
+  const apply = (tracks, syncMsg) => {
+    DATA = tracks || [];
+    buildOrder();
+    restoreNow();
+    $sync.textContent = syncMsg;
     render();
+  };
+
+  if(!SCRIPT_URL){
+    apply(cached ? cached.tracks : [], cached ? "캐시 · " + hhmm(cached.t) : "SCRIPT_URL 미설정");
     return;
   }
 
   try{
     const r = await fetch(SCRIPT_URL);
     const j = await r.json();
-    DATA = j.tracks || [];
-    localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), tracks:DATA}));
-    $sync.textContent = "동기화 " + hhmm(Date.now());
+    localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), tracks:j.tracks || []}));
+    apply(j.tracks, "동기화 " + hhmm(Date.now()));
   }catch(e){
-    if(cached){
-      DATA = cached.tracks;
-      $sync.textContent = "오프라인 · " + hhmm(cached.t) + " 캐시";
-    }else{
-      $sync.textContent = "불러오기 실패 — 네트워크 확인";
-    }
+    if(cached) apply(cached.tracks, "오프라인 · " + hhmm(cached.t) + " 캐시");
+    else apply([], "불러오기 실패 — 네트워크 확인");
   }
-  render();
 }
-
-document.getElementById("sorts").addEventListener("click", e => {
-  const btn = e.target.closest(".sort");
-  if(!btn) return;
-  sort = btn.dataset.sort;
-  document.querySelectorAll(".sort").forEach(p => p.setAttribute("aria-pressed", p===btn));
-  render();
-});
 
 load();
 </script>
