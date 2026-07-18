@@ -270,7 +270,8 @@ function buildOrder(){
     const cur = parseFloat(ORDER[i].bpm), prev = i>0 ? parseFloat(ORDER[i-1].bpm) : NaN;
     if(!isNaN(cur) && !isNaN(prev)){
       ORDER[i].delta = Math.round((cur-prev)*10)/10;
-      ORDER[i].pct = Math.round((cur-prev)/prev*1000)/10; /* 이전 곡 기준 피치 % */
+      /* 이 트랙이 NEXT일 때, 현재 곡 템포에 맞추기 위한 이 판의 페이더 % = (현재 − 다음) / 다음 */
+      ORDER[i].pct = Math.round((prev-cur)/cur*1000)/10;
     }else{
       ORDER[i].delta = null; ORDER[i].pct = null;
     }
