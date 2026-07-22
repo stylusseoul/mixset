@@ -155,6 +155,7 @@ button.chip{cursor:pointer}
 .sec b{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--faint)}
 .sec span{font-size:11px;color:var(--faint)}
 .listwrap{
+  position:relative;
   flex:1;min-height:120px;
   overflow-y:auto;
   overscroll-behavior:contain;
@@ -401,11 +402,16 @@ function renderList(){
 
 /* 현재 트랙을 리스트 창 안에서만 중앙 정렬 (페이지 스크롤 영향 없음) */
 function followCur(smooth){
-  const wrap = $("listwrap");
-  const el = wrap.querySelector(".row.cur") || wrap.querySelector(".row");
-  if(!el) return;
-  const top = el.offsetTop - (wrap.clientHeight - el.offsetHeight) / 2;
-  wrap.scrollTo({top:Math.max(0, top), behavior:smooth ? "smooth" : "auto"});
+  requestAnimationFrame(()=>{
+    const wrap = $("listwrap");
+    const el = wrap.querySelector(".row.cur") || wrap.querySelector(".row");
+    if(!el) return;
+    /* 컨테이너 기준 상대 위치로 계산 — offsetParent 영향 제거 */
+    const rel = el.getBoundingClientRect().top - wrap.getBoundingClientRect().top + wrap.scrollTop;
+    const max = wrap.scrollHeight - wrap.clientHeight;
+    const top = Math.max(0, Math.min(max, rel - (wrap.clientHeight - el.offsetHeight) / 2));
+    wrap.scrollTo({top, behavior:smooth ? "smooth" : "auto"});
+  });
 }
 
 function update(smooth){
