@@ -17,9 +17,9 @@
   --faint:#5d636d;
   --accent:#5F4B8B;            /* Pantone Ultra Violet */
   --accent-tx:#A89BD4;
-  --accent-soft:rgba(95,75,139,.22);
   --down:#5aa9ff;
   --over:#eba14c;
+  --bar:84px;                  /* 하단 고정 바 높이 */
   --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,'Apple SD Gothic Neo',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -34,19 +34,19 @@ body{
 }
 .num{font-variant-numeric:tabular-nums}
 
-/* ── 원 스크린 레이아웃 ─────────────── */
+/* ── 고정 프레임 ─────────────────────── */
 .app{
   display:flex;flex-direction:column;
   height:100vh;height:100dvh;
   max-width:560px;margin:0 auto;
-  padding:0 20px calc(10px + env(safe-area-inset-bottom));
+  padding:0 20px var(--bar);
 }
 
 /* ── header ─────────────────────────── */
 header{
   flex:none;
   display:flex;align-items:center;justify-content:space-between;
-  padding:18px 0 14px;
+  padding:16px 0 12px;
 }
 h1{font-size:16px;font-weight:700;letter-spacing:-.01em}
 .h-right{display:flex;align-items:center;gap:8px}
@@ -69,36 +69,35 @@ button.chip{cursor:pointer}
   flex:none;
   padding:13px 16px 12px;
   border-radius:16px;
+  background:var(--accent);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 6px 24px rgba(95,75,139,.35);
+}
+.nowcard.ready{
   background:#1a1d23;
-  border:1px solid rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.12);
+  box-shadow:none;
 }
-.nowcard .top{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:7px;
-}
+.nowcard .top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .dot{
   width:7px;height:7px;border-radius:50%;
-  background:var(--accent-tx);
+  background:#fff;
   animation:pulse 1.5s ease-in-out infinite;
 }
 @keyframes pulse{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.dot{animation:none}}
-.label{
-  font-size:11px;font-weight:700;letter-spacing:.12em;
-  color:var(--faint);
-}
-.nowcard .top .label{color:var(--ink)}
-.nowcard .top .p{margin-left:auto;font-size:12px;font-weight:600;color:var(--gray)}
-.nowcard .body{
-  display:flex;align-items:center;gap:14px;
-}
+.label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--faint)}
+.nowcard .top .label{color:#fff}
+.nowcard.ready .top .label{color:var(--faint)}
+.nowcard .top .p{margin-left:auto;font-size:12px;font-weight:600;color:rgba(255,255,255,.72)}
+.nowcard .body{display:flex;align-items:center;gap:14px}
 .nowcard .tw{flex:1;min-width:0}
 .nowcard .title{
   font-size:16.5px;font-weight:700;line-height:1.3;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .nowcard .artist{
-  font-size:12.5px;color:var(--gray);margin-top:1px;
+  font-size:12.5px;color:rgba(255,255,255,.72);margin-top:1px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .nowcard .bpm{flex:none;font-size:25px;font-weight:800;line-height:1;letter-spacing:-.02em}
@@ -108,15 +107,12 @@ button.chip{cursor:pointer}
 .hero{
   flex:none;
   margin-top:10px;
-  padding:17px 18px 16px;
+  padding:16px 18px 15px;
   border-radius:20px;
   background:var(--panel);
   border:1px solid var(--line);
 }
-.hero-top{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:11px;
-}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .hero-top .label{color:#8f83bd}
 .pos-chip{
   display:inline-flex;align-items:center;
@@ -132,10 +128,7 @@ button.chip{cursor:pointer}
   word-break:keep-all;overflow-wrap:anywhere;
 }
 .hero .artist{font-size:13.5px;color:#7e848e;margin-top:3px}
-.hero .bpmrow{
-  display:flex;align-items:baseline;gap:8px;
-  margin-top:12px;
-}
+.hero .bpmrow{display:flex;align-items:baseline;gap:8px;margin-top:11px}
 .hero .bpm{color:#c6cad2;font-size:34px;font-weight:800;line-height:1;letter-spacing:-.02em}
 .hero .bpmunit{font-size:12px;font-weight:600;color:var(--faint)}
 .delta{font-size:13.5px;font-weight:700}
@@ -145,44 +138,30 @@ button.chip{cursor:pointer}
 .delta .pct{font-weight:600;opacity:.85}
 .delta .pct.ov{color:var(--over)}
 .hero .memo{
-  margin-top:12px;padding-top:11px;
+  margin-top:11px;padding-top:10px;
   border-top:1px solid var(--line);
+  max-height:22vh;overflow-y:auto;overscroll-behavior:contain;
   font-size:13.5px;line-height:1.6;color:var(--gray);
   white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere;
 }
 .hero .done{padding:4px 0 2px;font-size:15px;color:var(--gray)}
 
-/* ── 컨트롤 버튼 ────────────────────── */
-.controls{flex:none;display:flex;gap:10px;margin-top:12px}
-.btn{
-  height:52px;
-  border:none;border-radius:14px;
-  font-family:var(--sans);
-  font-size:15.5px;font-weight:700;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity .15s;
-}
-.btn:disabled{opacity:.35;cursor:default}
-.btn-back{flex:1;background:none;border:1px solid var(--line);color:var(--gray)}
-.btn-next{flex:2;background:var(--accent);color:#fff}
-.btn-next:active:not(:disabled){opacity:.85}
-.btn-back:active:not(:disabled){opacity:.7}
-
-/* ── 리스트 ─────────────────────────── */
+/* ── 리스트 (가변 영역) ──────────────── */
 .sec{
   flex:none;
   display:flex;align-items:center;justify-content:space-between;
-  padding:18px 2px 8px;
+  padding:16px 2px 6px;
 }
 .sec b{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--faint)}
 .sec span{font-size:11px;color:var(--faint)}
 .listwrap{
-  flex:1;min-height:150px;
+  flex:1;min-height:120px;
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
-  margin:0 -8px;padding:0 8px 12px;
+  margin:0 -8px;padding:0 8px;
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 24px),transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - 24px),transparent 100%);
 }
 .row{
   display:grid;
@@ -197,7 +176,7 @@ button.chip{cursor:pointer}
 .row:active{background:rgba(255,255,255,.05)}
 .row.past{opacity:.35}
 .row.cur{
-  background:rgba(255,255,255,.045);
+  background:rgba(95,75,139,.16);
   border-bottom-color:transparent;
   box-shadow:inset 2px 0 0 var(--accent-tx);
 }
@@ -217,7 +196,33 @@ button.chip{cursor:pointer}
   font-size:12.5px;line-height:1.6;color:var(--gray);
   white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere;
 }
-.empty{padding:48px 0;text-align:center;color:var(--faint);font-size:14px}
+.empty{padding:40px 0;text-align:center;color:var(--faint);font-size:14px}
+
+/* ── 하단 고정 컨트롤 ────────────────── */
+.controls{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  max-width:560px;margin:0 auto;
+  display:flex;gap:10px;
+  padding:14px 20px calc(14px + env(safe-area-inset-bottom));
+  background:rgba(14,15,18,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+}
+.btn{
+  height:54px;
+  border:none;border-radius:14px;
+  font-family:var(--sans);
+  font-size:15.5px;font-weight:700;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s;
+}
+.btn:disabled{opacity:.35;cursor:default}
+.btn-back{flex:1;background:none;border:1px solid var(--line);color:var(--gray)}
+.btn-next{flex:2;background:var(--accent);color:#fff}
+.btn-next:active:not(:disabled){opacity:.85}
+.btn-back:active:not(:disabled){opacity:.7}
 </style>
 </head>
 <body>
@@ -233,16 +238,17 @@ button.chip{cursor:pointer}
 
   <div class="nowcard" id="nowcard"></div>
   <div class="hero" id="hero"></div>
-  <div class="controls">
-    <button class="btn btn-back" id="btnBack">이전</button>
-    <button class="btn btn-next" id="btnNext">셋 시작</button>
-  </div>
 
   <div class="sec"><b>SETLIST</b><span class="num" id="sync">불러오는 중…</span></div>
   <div class="listwrap" id="listwrap">
     <main id="list"></main>
   </div>
 
+</div>
+
+<div class="controls">
+  <button class="btn btn-back" id="btnBack">이전</button>
+  <button class="btn btn-next" id="btnNext">셋 시작</button>
 </div>
 
 <script>
@@ -271,7 +277,7 @@ function buildOrder(){
     const cur = parseFloat(ORDER[i].bpm), prev = i>0 ? parseFloat(ORDER[i-1].bpm) : NaN;
     if(!isNaN(cur) && !isNaN(prev)){
       ORDER[i].delta = Math.round((cur-prev)*10)/10;
-      /* 이 트랙이 NEXT일 때, 현재 곡 템포에 맞추기 위한 이 판의 페이더 % = (현재 − 다음) / 다음 */
+      /* 이 트랙이 NEXT일 때, 현재 곡 템포에 맞추기 위한 이 판의 페이더 % */
       ORDER[i].pct = Math.round((prev-cur)/cur*1000)/10;
     }else{
       ORDER[i].delta = null; ORDER[i].pct = null;
@@ -284,7 +290,7 @@ const deltaHtml = d => {
   const sign = v => v>0 ? "+"+v : String(v);
   let pct = "";
   if(d.pct !== null){
-    const ov = Math.abs(d.pct) > 8 ? " ov" : ""; /* 피치페이더 ±8% 초과 경고 */
+    const ov = Math.abs(d.pct) > 8 ? " ov" : ""; /* ±8% 초과 = 페이더로 매칭 불가 */
     pct = ` <span class="pct${ov}">(${d.delta===0 ? "±0" : sign(d.pct)}%)</span>`;
   }
   return `<span class="delta ${cls} num">${d.delta===0 ? "±0" : sign(d.delta)}${pct}</span>`;
@@ -314,7 +320,6 @@ function renderStage(){
 
   $("count").textContent = cur ? `${nowIdx+1} / ${n}` : `${n}곡`;
 
-  /* NOW 카드 */
   if(cur){
     $("nowcard").className = "nowcard";
     $("nowcard").innerHTML =
@@ -336,7 +341,6 @@ function renderStage(){
        <div class="body"><div class="tw"><p class="title">셋 시작 전 — 아래 버튼으로 첫 트랙 시작</p></div></div>`;
   }
 
-  /* NEXT 히어로 */
   const target = cur ? nxt : ORDER[0];
   if(!n){
     $("hero").innerHTML = `<p class="done">시트에 트랙이 없음</p>`;
@@ -360,7 +364,6 @@ function renderStage(){
        <p class="done">마지막 트랙 재생 중 — 셋 마무리</p>`;
   }
 
-  /* 버튼 */
   $("btnBack").disabled = nowIdx < 0;
   const bn = $("btnNext");
   if(!n){ bn.disabled = true; bn.textContent = "다음 트랙"; }
@@ -396,10 +399,13 @@ function renderList(){
   $("list").innerHTML = html;
 }
 
-/* 현재 트랙을 리스트 창 중앙으로 */
+/* 현재 트랙을 리스트 창 안에서만 중앙 정렬 (페이지 스크롤 영향 없음) */
 function followCur(smooth){
-  const el = document.querySelector(".row.cur") || document.querySelector(".row");
-  el && el.scrollIntoView({block:"center", behavior:smooth ? "smooth" : "auto"});
+  const wrap = $("listwrap");
+  const el = wrap.querySelector(".row.cur") || wrap.querySelector(".row");
+  if(!el) return;
+  const top = el.offsetTop - (wrap.clientHeight - el.offsetHeight) / 2;
+  wrap.scrollTo({top:Math.max(0, top), behavior:smooth ? "smooth" : "auto"});
 }
 
 function update(smooth){
