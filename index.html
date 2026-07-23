@@ -113,23 +113,22 @@ button.chip{cursor:pointer}
   border:1px solid var(--line);
 }
 .hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.hero-top .label{color:#8f83bd}
+.hero-top .label{color:var(--accent-tx)}
 .pos-chip{
   display:inline-flex;align-items:center;
   height:28px;padding:0 12px;
   border-radius:999px;
-  background:rgba(95,75,139,.16);
-  color:#9a8ec6;
+  background:rgba(95,75,139,.22);
+  color:var(--accent-tx);
   font-size:13.5px;font-weight:700;letter-spacing:.02em;
 }
 .hero .title{
-  color:#c6cad2;
   font-size:21px;font-weight:700;line-height:1.3;letter-spacing:-.015em;
   word-break:keep-all;overflow-wrap:anywhere;
 }
-.hero .artist{font-size:13.5px;color:#7e848e;margin-top:3px}
+.hero .artist{font-size:13.5px;color:var(--gray);margin-top:3px}
 .hero .bpmrow{display:flex;align-items:baseline;gap:8px;margin-top:11px}
-.hero .bpm{color:#c6cad2;font-size:34px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.hero .bpm{font-size:34px;font-weight:800;line-height:1;letter-spacing:-.02em}
 .hero .bpmunit{font-size:12px;font-weight:600;color:var(--faint)}
 .delta{font-size:13.5px;font-weight:700}
 .delta.up{color:var(--accent-tx)}
@@ -157,6 +156,7 @@ button.chip{cursor:pointer}
 .listwrap{
   position:relative;
   flex:1;min-height:120px;
+  opacity:.72;
   overflow-y:auto;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
@@ -175,14 +175,13 @@ button.chip{cursor:pointer}
   transition:opacity .18s;
 }
 .row:active{background:rgba(255,255,255,.05)}
-.row.past{opacity:.35}
+.row.past{opacity:.3}
 .row.cur{
-  background:rgba(95,75,139,.16);
+  background:rgba(255,255,255,.04);
   border-bottom-color:transparent;
-  box-shadow:inset 2px 0 0 var(--accent-tx);
+  box-shadow:inset 2px 0 0 rgba(255,255,255,.3);
 }
 .row .meta{font-size:11.5px;font-weight:600;color:var(--faint);margin-bottom:3px}
-.row .meta .tag{color:var(--accent-tx);margin-left:6px;letter-spacing:.08em}
 .row .title{
   font-size:15px;font-weight:600;line-height:1.35;
   word-break:keep-all;overflow-wrap:anywhere;
@@ -382,11 +381,10 @@ function renderList(){
   let html = "";
   ORDER.forEach((d,i)=>{
     const cls = i===nowIdx ? "cur" : (nowIdx>=0 && i<nowIdx) ? "past" : "";
-    const tag = i===nowIdx ? `<span class="tag">NOW</span>` : (nowIdx>=0 && i===nowIdx+1) ? `<span class="tag">NEXT</span>` : "";
     html += `
     <article class="row ${cls}" data-i="${i}">
       <div>
-        <p class="meta num">${esc(posLine(d))}${tag}</p>
+        <p class="meta num">${esc(posLine(d))}</p>
         <h3 class="title">${esc(d.title)}</h3>
         <p class="artist">${esc(d.artist)}</p>
       </div>
