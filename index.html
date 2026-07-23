@@ -67,40 +67,35 @@ button.chip{cursor:pointer}
 /* ── NOW 카드 ───────────────────────── */
 .nowcard{
   flex:none;
-  padding:13px 16px 12px;
+  padding:12px 16px 11px;
   border-radius:16px;
-  background:var(--accent);
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 6px 24px rgba(95,75,139,.35);
+  background:#15171c;
+  border:1px solid var(--line);
 }
-.nowcard.ready{
-  background:#1a1d23;
-  border-color:rgba(255,255,255,.12);
-  box-shadow:none;
-}
+.nowcard.ready{background:#15171c;border-color:var(--line)}
 .nowcard .top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .dot{
   width:7px;height:7px;border-radius:50%;
-  background:#fff;
+  background:var(--accent-tx);
   animation:pulse 1.5s ease-in-out infinite;
 }
 @keyframes pulse{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.dot{animation:none}}
 .label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--faint)}
-.nowcard .top .label{color:#fff}
+.nowcard .top .label{color:var(--gray)}
 .nowcard.ready .top .label{color:var(--faint)}
-.nowcard .top .p{margin-left:auto;font-size:12px;font-weight:600;color:rgba(255,255,255,.72)}
+.nowcard .top .p{margin-left:auto;font-size:12px;font-weight:600;color:var(--faint)}
 .nowcard .body{display:flex;align-items:center;gap:14px}
 .nowcard .tw{flex:1;min-width:0}
 .nowcard .title{
-  font-size:16.5px;font-weight:700;line-height:1.3;
+  font-size:15px;font-weight:600;line-height:1.3;color:var(--gray);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .nowcard .artist{
-  font-size:12.5px;color:rgba(255,255,255,.72);margin-top:1px;
+  font-size:12px;color:var(--faint);margin-top:1px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.nowcard .bpm{flex:none;font-size:25px;font-weight:800;line-height:1;letter-spacing:-.02em}
+.nowcard .bpm{flex:none;font-size:21px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--gray)}
 .nowcard.ready .title{color:var(--gray);font-weight:500}
 
 /* ── NEXT 히어로 ────────────────────── */
